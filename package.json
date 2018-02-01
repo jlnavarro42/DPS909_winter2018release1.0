@@ -1,0 +1,16 @@
+{
+  "name": "phonenumber",
+  "version": "1.0.0",
+  "description": "DPS909 release 1 make  a web api useing google phone number library",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "*",
+    "body-parser": "*",
+    "google-libphonenumber": "*"
+  },
+  "author": "Daniel Chang",
+  "license": "ISC"
+}
