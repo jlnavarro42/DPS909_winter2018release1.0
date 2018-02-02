@@ -4,12 +4,14 @@
   "description": "DPS909 release 1 make  a web api useing google phone number library",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "dependencies": {
     "express": "*",
     "body-parser": "*",
-    "google-libphonenumber": "*"
+    "google-libphonenumber": "*",
+    "chai": "*",
+    "mocha": "*"
   },
   "author": "Daniel Chang",
   "license": "ISC"

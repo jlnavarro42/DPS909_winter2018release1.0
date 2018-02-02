@@ -5,18 +5,52 @@ var PNF = require('google-libphonenumber').PhoneNumberFormat;
 var phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
 const port = 3000;
 
+var jsonPhoneNumber = {
+	"areaCode": null,
+	"number": null
+}
+
+function cleanString(str){
+	return str.replace(/%20/g, " ");
+	
+}
+module.exports = cleanString;
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 
 app.get('/*', function(req,res){
-	var regex = ""
-	//var n = req.url.search([0-9]);
-	//var phoneNumber = phoneUtil.parse('202 456 1414', 'US');
-	var str = req.url.replace(/%20/g, " ");
-	var str = str.replace(/[{()}]/g, " ");
-	str = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/.exec(str);
-	var phoneNumber = phoneUtil.parse(str[0], 'US');
-	res.send('your url is ' +req.url + ' phone number is ' +str[0] + " formated to be " + phoneUtil.format(phoneNumber, PNF.INTERNATIONAL));
-	console.log(phoneUtil.format(phoneNumber, PNF.INTERNATIONAL));
+	//formate the get request into something usable byut removing %20 and brackets/parenthesis
+	var str = cleanString(req.url);
 	
+	try{
+		//find the phone number
+		str = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/.exec(str);
+		
+		//parse the phonenumber
+		var phoneNumber = phoneUtil.parse(str[0], 'US');
+		
+		//display phonenumber on screen
+	
+		res.status(200).json(phoneNumber);
+		
+		console.log(phoneUtil.format(phoneNumber, PNF.INTERNATIONAL));
+	}
+	catch(err){
+		console.log("failed to find phone number");
+		res.status(500).send("no phonenumber!");
+	}	
+	
+});
+
+app.post('/*', function(req,res){
+	var str = req.body.phoneNumber;
+	var phoneNumber = phoneUtil.parse(str, 'US');
+	var result = phoneUtil.format(phoneNumber, PNF.INTERNATIONAL);
+	
+	res.status(200).json(phoneNumber);
+	console.log(result);
 });
 
 app.listen(port);
