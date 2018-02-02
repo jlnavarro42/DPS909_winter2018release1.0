@@ -21,13 +21,15 @@ npm install will install all the required tools to make the api run as specified
 
 ``` npm install ```
 
-alternatively you could run the commands individually useing:
+alternatively you could run the commands individually using:
 
-``` npm install express --save
+```
+npm install express --save
 npm install body-parser --save
 npm install google-libphonenumber --save
 npm install chai --save
-npm install mocha --save```
+npm install mocha --save
+```
 
 to run the api you use the command
 
@@ -36,6 +38,7 @@ to run the api you use the command
 to run the test file use the command
 
 ``` node test ```
+
 this will get your web api running. then navigate to http://localhost:3000/ for the app location.
 
 # How To Use
