@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-app.get('/*', function(req,res){
+app.get('/api/phonenumbers/parse/text/*', function(req,res){
 	//formate the get request into something usable byut removing %20 and brackets/parenthesis
 	var str = cleanString(req.url);
 	
@@ -45,7 +45,7 @@ app.get('/*', function(req,res){
 	
 });
 
-app.post('/*', function(req,res){
+app.post('/api/phonenumbers/parse/file', function(req,res){
 	var str = req.body.phoneNumber;
 	var phoneNumber = phoneUtil.parse(str, 'US');
 	var formatPhoneNumber = phoneUtil.format(phoneNumber, PNF.INTERNATIONAL);
