@@ -4,7 +4,7 @@
   "description": "DPS909 release 1 make  a web api useing google phone number library",
   "main": "app.js",
   "scripts": {
-    "test": "mocha"
+    "test": "./node_modules/.bin/mocha --reporter spec"
   },
   "dependencies": {
     "express": "*",
