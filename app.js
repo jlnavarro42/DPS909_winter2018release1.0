@@ -56,9 +56,12 @@ app.get('/api/phonenumbers/parse/file', (req,res) =>{
 
 app.post('/api/phonenumbers/parse/file', upload.single('file'), function(req,res){
 	var result = [];
+	if(!req.file){
+		res.status(400).send("No file found");
+	}
 	fs.readFile(req.file.path, (err, data)=>{
 		if(err){
-			res.status(400).send("No file found");
+			throw(error);
 		}
 		else{
 			//assuming the uploaded file is in regular text and not encoded in base64
