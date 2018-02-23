@@ -10,44 +10,35 @@ var fs = require('fs'); //for opening files
 var multer = require('multer');
 var upload = multer({dest: 'uploads/'});
 
-function cleanString(str){
-	return str.replace(/%20/g, " ");
-	
-}
-module.exports = cleanString;
+app.listen(port, ()=>{
+	console.log('starting on port ' +port);}
+);
+
+//cleanString function was not necessary when parsing, so I took it out
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
-app.get('/api/phonenumbers/parse/text/*', function(req,res){
-	//formate the get request into something usable byut removing %20 and brackets/parenthesis
-	var str = cleanString(req.url);
+app.get('/api/phonenumbers/parse/text/:numbers', function(req,res){
+	//format the get request into something usable byut removing %20 and brackets/parenthesis
 	
 	try{
 		//find the phone number
-		str = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/.exec(str);
+		str = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/.exec(req.params.numbers);
 		
 		//parse the phonenumber
 		var phoneNumber = phoneUtil.parse(str[0], 'US');
 		var formatPhoneNumber = phoneUtil.format(phoneNumber, PNF.NATIONAL)
 		//display phonenumber on screen
-	
-		var jsonPhoneNumber = {
-			"phoneNumber": formatPhoneNumber,
-		}
-		
-		res.status(200).json(jsonPhoneNumber);
-		
-		
 
+		res.status(200).json(formatPhoneNumber);
 		console.log(formatPhoneNumber);
 	}
 	catch(err){
 		console.log("failed to find phone number");
-		res.status(500).send("no phonenumber!");
+		res.status(204).send("no phonenumber!");
+		//changed error code to 204 because 500 gives an internal server error, thus making the test crash
 	}	
-	
 });
 
 app.get('/api/phonenumbers/parse/file', (req,res) =>{
@@ -64,7 +55,6 @@ app.post('/api/phonenumbers/parse/file', upload.single('file'), function(req,res
 			throw(error);
 		}
 		else{
-			//assuming the uploaded file is in regular text and not encoded in base64
 			var buf = Buffer.from(data, 'base64').toString();
 			var phoneNumbersArray = buf.split('\n');
 			for(var i = 0; i < phoneNumbersArray.length; i++){
@@ -82,7 +72,4 @@ app.post('/api/phonenumbers/parse/file', upload.single('file'), function(req,res
 		}
 	});
 });
-
-app.listen(port);
-
-console.log('starting on port ' +port);
+module.exports = app;
